@@ -1,6 +1,8 @@
 package com.moviles.api;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.widget.Toast;
@@ -19,13 +21,22 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class MainActivity extends AppCompatActivity {
     private Retrofit retrofit;
     private static final String BASEURL = "https://pokeapi.co/api/v2/";
+    private pokemonListAdapter pokemonAdapter;
+    private RecyclerView reciclador;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        reciclador = findViewById(R.id.recicladorPokemon);
+        pokemonAdapter = new pokemonListAdapter(this);
+        reciclador.setAdapter(pokemonAdapter);
+        GridLayoutManager grid = new GridLayoutManager(this,3);
+        reciclador.setLayoutManager(grid);
+
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASEURL)
+                .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
         obtenerDatosPokemon();
